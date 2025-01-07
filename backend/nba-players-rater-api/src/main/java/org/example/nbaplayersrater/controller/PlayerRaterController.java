@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("api/v1")
 public class PlayerRaterController {
     private final PlayerRaterFacade playerRaterFacade;
 
@@ -23,7 +24,7 @@ public class PlayerRaterController {
         return new ResponseEntity<>(matchupDto, HttpStatus.OK);
     }
 
-    @PostMapping("/answer")
+    @PostMapping("/matchup/answer")
     public ResponseEntity<Void> answer(@RequestBody @Valid AnswerDto answerDto) {
         playerRaterFacade.processAnswer(answerDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
