@@ -1,0 +1,8 @@
+backend/nba-players-rater-api/src/main/resources/logs
+backend/nba-players-rater-api/src/main/resources/nba_players_data.txt
+backend/.idea
+backend/nba-players-rater-api/.idea
+backend/nba-players-rater-api/target
+
+.env
+.idea
