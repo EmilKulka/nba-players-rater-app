@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1")
+@CrossOrigin("*")
 public class PlayerRaterController {
     private final PlayerRaterFacade playerRaterFacade;
 
