@@ -1,8 +1,8 @@
 import './style.css'
 
-export default function PlayerCard({ id, name, surname, imgUrl, onVote, onClick }) {
+export default function PlayerCard({ id, name, surname, imgUrl, onVote, disabled }) {
     return (
-        <div className="player-card" onClick={onClick}>
+        <div className="player-card">
             <img 
                 src={imgUrl} 
                 alt={`${name} ${surname}`} 
@@ -12,14 +12,12 @@ export default function PlayerCard({ id, name, surname, imgUrl, onVote, onClick 
                 <div className="player-name">{name} {surname}</div>
                 <button 
                     className="vote-button"
-                    onClick={(e) => {
-                        e.stopPropagation(); 
-                        onVote?.(id);
-                    }}
+                    onClick={onVote}
+                    disabled={disabled}
                 >
-                    Vote
+                    {disabled ? 'Voting...' : 'Vote'}
                 </button>
             </div>
         </div>
-    )
+    );
 }

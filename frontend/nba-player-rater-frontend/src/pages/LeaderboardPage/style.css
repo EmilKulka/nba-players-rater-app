@@ -1,7 +1,112 @@
-.container {
-    min-height: 100vh;
-    padding-top: 64px;
+.leaderboard-container {
+    padding: 80px 20px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.leaderboard-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.leaderboard-table {
+    background: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1a1a1a;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+th:first-child {
+    text-align: center;
+    width: 80px;
+}
+
+th:last-child {
+    text-align: right;
+    padding-right: 2rem;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: none;
+}
+
+tr {
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.player-row:hover {
+    background: #333;
+}
+
+.rank-cell {
+    width: 80px;
+    text-align: center;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.player-cell {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem 1rem 1rem;
+    flex: 1;
+}
+
+.player-thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.player-name {
+    font-weight: 500;
+    flex: 1;
+}
+
+.score-cell {
+    text-align: right;
+    font-weight: 500;
+    padding: 1rem;
+    padding-right: 2rem;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-container {
+        padding: 70px 10px 10px;
+    }
+
+    .player-thumbnail {
+        width: 32px;
+        height: 32px;
+    }
+
+    td, th {
+        padding: 0.75rem;
+    }
+
+    .leaderboard-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .player-cell {
+        padding: 0.75rem 1rem 0.75rem 0.75rem;
+    }
 }

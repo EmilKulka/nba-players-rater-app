@@ -12,3 +12,13 @@
       margin: 0 auto;
   }
 }
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff4444;
+}

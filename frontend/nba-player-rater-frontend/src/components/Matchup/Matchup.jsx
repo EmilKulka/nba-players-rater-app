@@ -1,34 +1,66 @@
-import PlayerCard from "../PlayerCard/PlayerCard"
-import './style.css' 
-
+// components/Matchup/Matchup.jsx
+import { useState, useEffect } from 'react';
+import PlayerCard from "../PlayerCard/PlayerCard";
+import { matchupService } from '../../services/api/matchupService';
+import './style.css';
 
 export default function Matchup() {
-    const handlePlayerClick = (playerId) => {
-        console.log(`Clicked player: ${playerId}`);  
+    const [matchup, setMatchup] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [voting, setVoting] = useState(false);
+
+    useEffect(() => {
+        loadMatchup();
+    }, []);
+
+    const loadMatchup = async () => {
+        try {
+            setLoading(true);
+            const data = await matchupService.getCurrentMatchup();
+            setMatchup(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleVote = (playerId) => {
-        console.log(`Voted for player: ${playerId}`);
+    const handleVote = async (playerId) => {
+        try {
+            setVoting(true);
+            await matchupService.submitVote(matchup.id, playerId);
+            await loadMatchup(); 
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setVoting(false);
+        }
     };
+
+
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return <div className="error">{error}</div>;
+    if (!matchup) return <div>No matchup available</div>;
 
     return (
         <div className="matchup-container">
             <PlayerCard 
-                id="1" 
-                name="John" 
-                surname="Doe" 
-                imgUrl="https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1627824.png"
-                onClick={() => handlePlayerClick("1")}
-                onVote={handleVote}
+                id={matchup.playerId}
+                name={matchup.playerName}
+                surname={matchup.playerSurname}
+                imgUrl={matchup.playerImgUrl}
+                onVote={() => handleVote(matchup.playerId)}
+                disabled={voting}
             />
             <PlayerCard 
-                id="2" 
-                name="Jane" 
-                surname="Smith" 
-                imgUrl="https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630202.png"
-                onClick={() => handlePlayerClick("2")}
-                onVote={handleVote}
+                id={matchup.player2Id}
+                name={matchup.player2Name}
+                surname={matchup.player2Surname}
+                imgUrl={matchup.player2ImgUrl}
+                onVote={() => handleVote(matchup.player2Id)}
+                disabled={voting}
             />
         </div>
-    )
+    );
 }
