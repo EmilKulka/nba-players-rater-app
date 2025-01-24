@@ -29,7 +29,7 @@ sudo systemctl start docker
 
 # Clone repository
 if [ -d "nba-players-rater-app" ]; then
-  echo "Repozytorium już istnieje. Przechodzimy do aktualizacji..."
+  echo "Repository exists. Updating..."
   cd nba-players-rater-app
   git pull origin main || { echo "Failed to update repository"; exit 1; }
 else
@@ -38,7 +38,7 @@ else
   cd nba-players-rater-app
 fi
 
-# Create .env files
+# Create .env files (DON'T JUDGE PLS)
 cat > .env << EOF
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=foo
@@ -49,7 +49,7 @@ SPRING_DATASOURCE_URL=jdbc:postgresql://local_pg:5432/nba-players-rater
 EOF
 
 cat > ${FRONTEND_DIR}/.env << EOF
-REACT_APP_API_BASE_URL=http://localhost:8080/api/v1
+VITE_REACT_APP_API_BASE_URL=http://<WELL YEAH>:8080/api/v1
 EOF
 
 # Build frontend
@@ -90,6 +90,6 @@ sudo systemctl restart nginx
 # Run Docker Compose
 cd ${BACKEND_DIR}/..
 sudo docker-compose down
-sudo docker-compose up -d
+sudo docker-compose up -d --build --remove-orphans
 
 echo "Deployment completed successfully!"
