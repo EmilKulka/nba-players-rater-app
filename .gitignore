@@ -5,4 +5,5 @@ backend/nba-players-rater-api/.idea
 backend/nba-players-rater-api/target
 
 .env
+.id_student
 .idea
