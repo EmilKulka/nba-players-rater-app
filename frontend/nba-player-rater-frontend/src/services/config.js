@@ -7,7 +7,7 @@ const api = axios.create({
         'Content-Type': 'application/json',
     }
 });
-console.log(api.REACT_APP_API_BASE_URL)
+console.log(import.meta.env.VITE_REACT_APP_API_BASE_URL)
 
 api.interceptors.request.use(
     (config) => {

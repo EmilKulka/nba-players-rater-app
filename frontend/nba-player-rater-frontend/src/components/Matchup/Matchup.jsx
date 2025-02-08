@@ -1,4 +1,3 @@
-// components/Matchup/Matchup.jsx
 import { useState, useEffect } from 'react';
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { matchupService } from '../../services/api/matchupService';
