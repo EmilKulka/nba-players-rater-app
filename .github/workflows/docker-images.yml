@@ -25,21 +25,25 @@ jobs:
 
     - name: Start and Wait for PostgreSQL
       run: |
-        docker run --rm -d --network host postgres:17 \
+        echo "Starting PostgreSQL..."
+        docker run -d --network host --name temp_postgres \
           -e POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
           -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
           -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
-          -p 5432:5432 \
-          --health-cmd "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" \ # Use environment variables here
-          --health-interval 10s \
-          --health-timeout 5s \
-          --health-retries 5 \
-          --name temp_postgres
+          -p 5432:5432 postgres:17
 
-        docker wait temp_postgres
+        echo "Waiting for PostgreSQL..."
+        for i in {1..10}; do
+          if docker exec temp_postgres pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}; then
+            echo "PostgreSQL is ready!"
+            exit 0
+          fi
+          echo "PostgreSQL not ready... waiting 3 seconds"
+          sleep 3
+        done
 
-        docker stop temp_postgres
-        docker rm temp_postgres
+        echo "Error: Couldn't connect to PostgreSQL after 10 tries."
+        exit 1
 
     - name: Build and push backend
       uses: docker/build-push-action@v3
