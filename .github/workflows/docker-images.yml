@@ -9,22 +9,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+  
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -38,8 +23,23 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_TOKEN }}
 
-    - name: Wait for PostgreSQL
-      run: sleep 20
+    - name: Start and Wait for PostgreSQL
+      run: |
+        docker run --rm -d --network host postgres:17 \
+          -e POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+          -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+          -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
+          -p 5432:5432 \
+          --health-cmd "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" \ # Use environment variables here
+          --health-interval 10s \
+          --health-timeout 5s \
+          --health-retries 5 \
+          --name temp_postgres
+
+        docker wait temp_postgres
+
+        docker stop temp_postgres
+        docker rm temp_postgres
 
     - name: Build and push backend
       uses: docker/build-push-action@v3
